@@ -36,20 +36,24 @@ To run the ScolarReach MVP locally on your machine:
 ```bash
 git clone [https://github.com/OmarElboray/ScolarReach.git](https://github.com/OmarElboray/ScolarReach.git)
 cd ScolarReach
-2. Install dependencies
+```
+
+**2. Install dependencies**
 Ensure you have Python installed, then install Flask:
-
-Bash
+```bash
 pip install flask
-3. Run the application
+```
+
+**3. Run the application**
 The SQLite database will automatically initialize on the first run.
-
-Bash
+```bash
 python app.py
-The app will be live at http://127.0.0.1:5000
+```
+*The app will be live at `http://127.0.0.1:5000`*
 
-📁 Architecture Overview
-Plaintext
+## 📁 Architecture Overview
+
+```text
 ScolarReach/
 ├── app.py                      # Core Flask routing, Auth logic, and DB initialization
 └── templates/
@@ -61,18 +65,20 @@ ScolarReach/
     ├── new_project.html        # Pitch submission form
     ├── project_detail.html     # Dynamic view for applications and mentor actions
     └── errors/                 # Graceful fallback UI
-🗺️ Future Roadmap
+```
+
+## 🗺️ Future Roadmap
+
 As ScolarReach moves beyond the MVP phase, planned features include:
+- [ ] **Flask-Mail Integration:** Automated email notifications for application status updates.
+- [ ] **User Profiles:** Expanded profile pages showcasing past research and academic credentials.
+- [ ] **Data Export:** Allowing mentors to export matched student cohorts to CSV.
 
-[ ] Flask-Mail Integration: Automated email notifications for application status updates.
+## 👨‍💻 Author
 
-[ ] User Profiles: Expanded profile pages showcasing past research and academic credentials.
+**Omar Elboray**
+* Grade 11 STEM Student & Developer specializing in AI-Integrated Biomedicine.
+* LinkedIn: [omar-elboray](https://www.linkedin.com/in/omar-elboray-1309b7354/)
 
-[ ] Data Export: Allowing mentors to export matched student cohorts to CSV.
-
-👨‍💻 Author
-Omar Elboray
-
-Grade 11 STEM Student & Developer specializing in AI-Integrated Biomedicine.
-
-LinkedIn: omar-elboray
+---
+*Built for the future of frugal science and accessible research.*
