@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard · ScolarReach{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-12">
+
+  <!-- Page header -->
+  <div class="mb-10 fade-up">
+    <span class="rule-amber mb-4"></span>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <h1 class="font-display text-4xl text-ink">
+          Hello, <em>{{ user_name.split()[0] }}</em>
+        </h1>
+        <p class="text-ink/60 mt-1 text-sm">
+          Track and manage your research project submissions.
+        </p>
+      </div>
+      <a href="{{ url_for('new_project') }}"
+         class="inline-flex items-center gap-2 bg-amber hover:bg-amber-light text-white
+                font-semibold text-sm px-5 py-2.5 rounded-full shadow transition-colors
+                active:scale-[.98] whitespace-nowrap self-start sm:self-auto">
+        <span class="text-lg leading-none">+</span> New Project
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10 fade-up-2">
+    {% set total      = projects | length %}
+    {% set open_n     = projects | selectattr('status','equalto','open')        | list | length %}
+    {% set active_n   = projects | selectattr('status','equalto','in_progress') | list | length %}
+    {% set done_n     = projects | selectattr('status','equalto','completed')   | list | length %}
+    {% for label, val, colour in [
+        ('Total',       total,    'bg-ink'),
+        ('Open',        open_n,   'bg-sage'),
+        ('In Progress', active_n, 'bg-amber'),
+        ('Completed',   done_n,   'bg-blue-600'),
+    ] %}
+    <div class="bg-white rounded-xl shadow-card p-5 flex flex-col gap-1">
+      <span class="text-3xl font-display font-bold {{ colour }} bg-clip-text"
+            style="color: inherit">{{ val }}</span>
+      <span class="text-xs font-semibold text-ink/50 uppercase tracking-widest">{{ label }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Project list -->
+  {% if projects %}
+  <div class="space-y-4 fade-up-3">
+    <h2 class="font-display text-xl text-ink mb-2">Your Projects</h2>
+
+    {% for project in projects %}
+    <a href="{{ url_for('project_detail', project_id=project.id) }}"
+       class="group flex flex-col sm:flex-row sm:items-center justify-between gap-4
+              bg-white rounded-2xl shadow-card hover:shadow-lifted
+              px-6 py-5 transition-all duration-200 border border-transparent
+              hover:border-amber/20">
+
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-3 mb-1">
+          <!-- Status badge -->
+          <span class="inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full
+                       badge-{{ project.status }}">
+            {{ project.status.replace('_',' ').title() }}
+          </span>
+          {% if project.domain %}
+          <span class="text-xs text-ink/40 font-medium">{{ project.domain }}</span>
+          {% endif %}
+        </div>
+        <h3 class="text-ink font-semibold text-base group-hover:text-amber transition-colors truncate">
+          {{ project.title }}
+        </h3>
+        {% if project.description %}
+        <p class="text-ink/50 text-xs mt-1 line-clamp-2">{{ project.description }}</p>
+        {% endif %}
+      </div>
+
+      <div class="flex items-center gap-4 text-xs text-ink/40 shrink-0">
+        <span>{{ project.created_at[:10] }}</span>
+        <span class="text-amber group-hover:translate-x-1 transition-transform">→</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <!-- Empty state -->
+  <div class="fade-up-3 flex flex-col items-center justify-center py-24 text-center">
+    <div class="w-20 h-20 rounded-full bg-parch-dark flex items-center justify-center
+                text-4xl mb-5">📋</div>
+    <h3 class="font-display text-2xl text-ink mb-2">No projects yet</h3>
+    <p class="text-ink/50 text-sm mb-6 max-w-xs">
+      Submit your first research project idea and get matched with a mentor.
+    </p>
+    <a href="{{ url_for('new_project') }}"
+       class="bg-amber hover:bg-amber-light text-white font-semibold
+              text-sm px-6 py-2.5 rounded-full shadow transition-colors">
+      Submit a project →
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

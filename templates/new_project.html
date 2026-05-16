@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}New Project · ScolarReach{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-6 py-12">
+
+  <!-- Back link -->
+  <a href="{{ url_for('dashboard') }}"
+     class="inline-flex items-center gap-1.5 text-sm text-ink/50 hover:text-amber
+            transition-colors mb-8 fade-up">
+    ← Back to dashboard
+  </a>
+
+  <!-- Header -->
+  <div class="mb-8 fade-up">
+    <span class="rule-amber mb-4"></span>
+    <h1 class="font-display text-4xl text-ink">Submit a<br><em>Research Project</em></h1>
+    <p class="text-ink/60 mt-2 text-sm">
+      Describe your project idea and we'll help match you with the right mentor.
+    </p>
+  </div>
+
+  <!-- Card -->
+  <div class="bg-white rounded-2xl shadow-lifted p-8 fade-up-2">
+
+    <!-- Inline errors -->
+    {% if errors %}
+    <ul class="mb-6 bg-red-50 border border-red-200 rounded-lg px-4 py-3
+               text-sm text-red-700 space-y-1">
+      {% for error in errors %}
+        <li class="flex items-start gap-2"><span>·</span> {{ error }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('new_project') }}" novalidate class="space-y-6">
+
+      <!-- Title -->
+      <div>
+        <label for="title"
+               class="block text-xs font-semibold text-ink/70 uppercase tracking-widest mb-1.5">
+          Project Title <span class="text-red-400">*</span>
+        </label>
+        <input id="title" name="title" type="text" required maxlength="120"
+               value="{{ request.form.get('title', '') }}"
+               placeholder="e.g. Machine Learning for Early Alzheimer's Detection"
+               class="w-full bg-parch border border-parch-dark rounded-lg px-4 py-2.5
+                      text-sm text-ink placeholder:text-ink/30 transition-colors" />
+        <p class="text-xs text-ink/40 mt-1">Keep it clear and descriptive (max 120 characters).</p>
+      </div>
+
+      <!-- Domain -->
+      <div>
+        <label for="domain"
+               class="block text-xs font-semibold text-ink/70 uppercase tracking-widest mb-1.5">
+          Research Domain <span class="text-red-400">*</span>
+        </label>
+        <select id="domain" name="domain" required
+                class="w-full bg-parch border border-parch-dark rounded-lg px-4 py-2.5
+                       text-sm text-ink transition-colors appearance-none
+                       bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20fill%3D%22%230D1B2A%22%20fill-opacity%3D%22.4%22%20d%3D%22M4%206l4%204%204-4%22%2F%3E%3C%2Fsvg%3E')]
+                       bg-no-repeat bg-[right_1rem_center]">
+          <option value="" disabled {% if not request.form.get('domain') %}selected{% endif %}>
+            Select a domain…
+          </option>
+          {% set domains = [
+            'Biology & Life Sciences',
+            'Chemistry',
+            'Computer Science & AI',
+            'Environmental Science',
+            'Mathematics & Statistics',
+            'Medicine & Health',
+            'Physics & Astronomy',
+            'Psychology & Neuroscience',
+            'Social Sciences',
+            'Engineering',
+            'Other',
+          ] %}
+          {% for d in domains %}
+          <option value="{{ d }}"
+                  {% if request.form.get('domain') == d %}selected{% endif %}>
+            {{ d }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label for="description"
+               class="block text-xs font-semibold text-ink/70 uppercase tracking-widest mb-1.5">
+          Project Description
+        </label>
+        <textarea id="description" name="description" rows="5"
+                  placeholder="Briefly explain your research question, why it matters, and what kind of mentorship you're looking for…"
+                  class="w-full bg-parch border border-parch-dark rounded-lg px-4 py-3
+                         text-sm text-ink placeholder:text-ink/30 transition-colors resize-y
+                         min-h-[120px]">{{ request.form.get('description', '') }}</textarea>
+        <p class="text-xs text-ink/40 mt-1">
+          The more detail you provide, the better your mentor match will be.
+        </p>
+      </div>
+
+      <!-- Mentor expectation callout -->
+      <div class="flex gap-3 bg-sage/10 border border-sage/20 rounded-xl p-4">
+        <span class="text-xl mt-0.5" aria-hidden="true">💡</span>
+        <p class="text-xs text-ink/60 leading-relaxed">
+          Mentors are academic researchers and professionals who volunteer their time.
+          Be specific about what kind of guidance you need — feedback on methodology,
+          writing support, literature guidance, etc.
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-3 pt-2">
+        <button type="submit"
+                class="flex-1 bg-ink hover:bg-ink-light text-parch font-semibold
+                       py-3 rounded-xl transition-colors shadow-card text-sm
+                       active:scale-[.98]">
+          Submit Project →
+        </button>
+        <a href="{{ url_for('dashboard') }}"
+           class="flex-1 text-center bg-parch hover:bg-parch-dark text-ink/70 font-semibold
+                  py-3 rounded-xl transition-colors text-sm border border-parch-dark">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}
